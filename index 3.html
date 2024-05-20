@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Geolocation-based AR Environmental Data Visualization</title>
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js/build/three.min.js"></script>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <a-scene>
+    <!-- Camera setup for viewing the 3D scene -->
+    <a-camera position="0 1.6 0"></a-camera>
+
+    <!-- Dummy geolocation data -->
+    <a-entity gps-entity-place="latitude: 53.2263; longitude: -4.1282">
+      <a-entity id="chart" position="0 0 0">
+        <!-- Bars will be added here via JavaScript -->
+      </a-entity>
+    </a-entity>
+  </a-scene>
+
+  <script>
+    // Function to create a bar
+    function createBar(x, height, color) {
+      const bar = document.createElement('a-box');
+      bar.setAttribute('position', `${x} ${height / 2} 0`);
+      bar.setAttribute('depth', '0.5');
+      bar.setAttribute('width', '0.5');
+      bar.setAttribute('height', height);
+      bar.setAttribute('color', color);
+      return bar;
+    }
+
+    // Imaginary environmental data
+    const data = [
+      { label: 'Location A', value: 5, color: 'red' },
+      { label: 'Location B', value: 3, color: 'green' },
+      { label: 'Location C', value: 7, color: 'blue' },
+      { label: 'Location D', value: 2, color: 'yellow' }
+    ];
+
+    // Add bars to the chart based on data
+    const chart = document.getElementById('chart');
+    data.forEach((item, index) => {
+      chart.appendChild(createBar(index - data.length / 2, item.value, item.color));
+    });
+
+    // Initialize GPS location
+    document.querySelector('[gps-entity-place]').addEventListener('gps-entity-place-update', e => {
+      console.log(e.detail.position);
+    });
+  </script>
+</body>
+</html>
+
+
+
